@@ -1,0 +1,74 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Users list</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<h2>Users List</h2>
+
+<form method="post" th:action="@{/admin/users}" th:object="${userInfo}">
+    <label for="username"></label><input id="username" placeholder="Enter Username" required th:field="*{username}" type="text"/>
+    <br/><br/>
+    <label for="firstName"></label><input id="firstName" placeholder="Enter First Name" required th:field="*{firstName}" type="text"/>
+    <br/><br/>
+    <label for="lastName"></label><input id="lastName" placeholder="Enter Last Name" required th:field="*{lastName}" type="text"/>
+    <br/><br/>
+    <label for="email"></label><input id="email" placeholder="Enter password" required th:field="*{password}" type="text"/>
+    <br/><br/>
+    <div>
+        <p>Choose roles:</p>
+        <label>
+            <select name="rolesSelected" multiple="multiple">>
+                <option disabled selected>select role</option>
+                <div th:each="role : ${allRoles}">
+                    <option th:text="${role.getName()}" th:value="${role.getId()}" name="roles"></option>
+                </div>
+            </select>
+        </label>
+
+    </div>
+    <input type="submit" value="Create User">
+    <input type="reset" value="Reset">
+
+</form>
+
+<br/><br/>
+
+<div>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>USERNAME</th>
+            <th>FIRST NAME</th>
+            <th>LAST NAME</th>
+            <th>PASSWORD</th>
+            <th>ROLES</th>
+            <th>ACTIONS</th>
+
+        </tr>
+
+        <tr th:if="${#lists.isEmpty(users)}">
+            <td colspan="7">No Records found. Add some...!</td>
+        </tr>
+
+        <tr th:each ="user : ${users}">
+            <td th:utext="${user.getId()}">...</td>
+            <td th:utext="${user.getUsername()}">...</td>
+            <td th:utext="${user.getFirstName()}">...</td>
+            <td th:utext="${user.getLastName()}">...</td>
+            <td th:utext="${user.getPassword()}">...</td>
+            <td th:utext="${user.getRoles()}">...</td>
+            <td><form th:method="DELETE" th:action="@{'/admin/users/delete/' + ${user.id}}">
+                <button type="submit" name="submit" value="value" class="link-button">DELETE</button>
+            </form></td>
+            <td><form th:method="GET" th:action="@{'/admin/users/edit/' + ${user.id}}">
+                <button type="submit" name="submit" value="value" class="link-button">EDIT</button>
+            </form></td>
+        </tr>
+    </table>
+
+</div>
+</body>
+</html>
