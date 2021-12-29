@@ -2,35 +2,30 @@ package com.jm.boot_mvc.Service;
 
 import com.jm.boot_mvc.DAO.RoleDAO;
 import com.jm.boot_mvc.DAO.UserDAO;
+import com.jm.boot_mvc.models.Role;
 import com.jm.boot_mvc.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserDetailsService, UserService {
 
-    private UserDAO userDAO;
-    private RoleDAO roleDAO;
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final UserDAO userDAO;
 
-    @Autowired
-    public void setUserDAO(UserDAO userDAO) {
+    public UserServiceImpl(UserDAO userDAO) {
         this.userDAO = userDAO;
-    }
-
-    @Autowired
-    public void setRoleDAO(RoleDAO roleDAO) {
-        this.roleDAO = roleDAO;
-    }
-
-    @Autowired
-    public void setbCryptPasswordEncoder(BCryptPasswordEncoder bCryptPasswordEncoder) {
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     @Override
@@ -42,7 +37,6 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void add(User user) {
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userDAO.add(user);
     }
 
@@ -55,7 +49,6 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void edit(User user) {
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userDAO.edit(user);
     }
 
@@ -71,7 +64,7 @@ public class UserServiceImpl implements UserService {
         return userDAO.getByUsername(username);
     }
 
-    /*@Override
+    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userDAO.getByUsername(username);
         if (user == null) {
@@ -82,5 +75,5 @@ public class UserServiceImpl implements UserService {
 
     private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
         return roles.stream().map(r -> new SimpleGrantedAuthority(r.getName())).collect(Collectors.toList());
-    }*/
+    }
 }
