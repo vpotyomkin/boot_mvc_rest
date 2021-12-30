@@ -1,12 +1,16 @@
 package com.jm.boot_mvc.models;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import javax.persistence.*;
 
 @Entity
 @Table(name = "roles")
 @Data
+@NoArgsConstructor
+@Getter
 public class Role implements GrantedAuthority {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,6 +20,10 @@ public class Role implements GrantedAuthority {
     @Column(name = "name", unique = true)
     String name;
 
+    public Role(String name) {
+        this.name = name;
+    }
+
     @Override
     public String toString() {
         return name;
@@ -24,21 +32,5 @@ public class Role implements GrantedAuthority {
     @Override
     public String getAuthority() {
         return name;
-    }
-
-    @Override
-    public int hashCode() {
-        return Long.valueOf(id).hashCode();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (!(obj instanceof Role)) {
-            return false;
-        }
-        return this.id == ((Role) obj).getId();
     }
 }

@@ -28,6 +28,9 @@
     </table>
 
 </div>
-<input type="button" value="LOGOUT" onclick="window.location.href = 'logout'">
+<form th:action="@{/logout}" method="POST">
+    <input type="submit" value="Logout"/>
+</form>
+
 </body>
 </html>

@@ -19,15 +19,12 @@
     <br/><br/>
     <div>
         <p>Choose roles:</p>
-        <label>
-            <select name="rolesSelected" multiple="multiple">>
-                <option disabled selected>select role</option>
-                <div th:each="role : ${allRoles}">
-                    <option th:text="${role.getName()}" th:value="${role.getId()}" name="roles"></option>
+            <select name="rolesSelected" multiple required size="6">
+                <option disabled selected>select role(s)</option>
+                <div  th:each="role : ${allRoles}">
+                    <option th:text="${role.getName()}" th:value="${role.getId()}" name="roles"/>
                 </div>
             </select>
-        </label>
-
     </div>
     <input type="submit" value="Create User">
     <input type="reset" value="Reset">
@@ -70,6 +67,8 @@
     </table>
 
 </div>
-<input type="button" value="LOGOUT" onclick="window.location.href = 'logout'">
+<form th:action="@{/logout}" method="POST">
+    <input type="submit" value="Logout"/>
+</form>
 </body>
 </html>

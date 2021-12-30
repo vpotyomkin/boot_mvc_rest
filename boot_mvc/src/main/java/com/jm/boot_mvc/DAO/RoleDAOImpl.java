@@ -13,6 +13,11 @@ public class RoleDAOImpl implements RoleDAO {
     EntityManager entityManager;
 
     @Override
+    public void add(Role role) {
+        entityManager.persist(role);
+    }
+
+    @Override
     public Set<Role> getAll() {
         return new HashSet<>(entityManager.createQuery("from Role", Role.class).getResultList());
     }

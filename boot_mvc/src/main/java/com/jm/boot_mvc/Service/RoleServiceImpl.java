@@ -2,6 +2,7 @@ package com.jm.boot_mvc.Service;
 
 import com.jm.boot_mvc.DAO.RoleDAO;
 import com.jm.boot_mvc.models.Role;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.Set;
@@ -9,10 +10,16 @@ import java.util.Set;
 @Service
 @Transactional
 public class RoleServiceImpl implements RoleService {
-    private final RoleDAO roleDAO;
+    private RoleDAO roleDAO;
 
-    public RoleServiceImpl(RoleDAO roleDAO) {
+    @Autowired
+    public void setRoleDAO(RoleDAO roleDAO) {
         this.roleDAO = roleDAO;
+    }
+
+    @Override
+    public void add(Role role) {
+        roleDAO.add(role);
     }
 
     @Override

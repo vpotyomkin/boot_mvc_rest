@@ -9,18 +9,23 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
 
-    private final UserService userService;
-    private final RoleService roleService;
+    private UserService userService;
+    private RoleService roleService;
 
     @Autowired
-    public AdminController(UserService userService, RoleService roleService) {
+    public void setUserService(UserService userService) {
         this.userService = userService;
+    }
+
+    @Autowired
+    public void setRoleService(RoleService roleService) {
         this.roleService = roleService;
     }
 
@@ -32,7 +37,7 @@ public class AdminController {
         return "/admin/users";}
 
     @PostMapping(path = "/users")
-    public String add(@ModelAttribute("userInfo") User user, @ModelAttribute("rolesSelected") Set<Long> roles){
+    public String add(@ModelAttribute("userInfo") User user, @RequestParam("rolesSelected") Long[] roles){
         Set<Role> roleSet = new HashSet<>();
         for (Long s : roles) {
             roleSet.add(roleService.getById(s));
@@ -54,7 +59,7 @@ public class AdminController {
         return "admin/edit";}
 
     @PatchMapping(path = "/users/edit/{id}")
-    public String editUser(@ModelAttribute("userToEdit") User userToEdit, @PathVariable("id") long id, @ModelAttribute("rolesSelected") Set<Long> roles, Model model) {
+    public String editUser(@ModelAttribute("userToEdit") User userToEdit, @PathVariable("id") long id, @RequestParam("rolesSelected") Long[] roles, Model model) {
         model.addAttribute("userToEdit", userService.getById(id));
         Set<Role> roleSet = new HashSet<>();
         for (Long s : roles) {

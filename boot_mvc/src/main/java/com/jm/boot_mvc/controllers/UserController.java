@@ -15,11 +15,9 @@ import java.util.Set;
 @RequestMapping("/user")
 public class UserController {
 
-    private final UserService userService;
-
-
+    private UserService userService;
     @Autowired
-    public UserController(UserService userService, RoleService roleService) {
+    public void setUserService(UserService userService) {
         this.userService = userService;
     }
 

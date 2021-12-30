@@ -11,8 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 
 @Configuration
@@ -33,6 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         auth.userDetailsService(userService).passwordEncoder(passwordEncoder());
         // конфигурация для прохождения аутентификации
         //тут для аутентификации нам нужно чтобы юзердитейлс информацию передавал
@@ -40,21 +40,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.antMatcher("/**")
+        http.antMatcher("/*")
                 .authorizeRequests()
                 .antMatchers("/admin/**").hasAnyAuthority("ADMIN", "SUPERADMIN")
                 .antMatchers("/user").hasAnyAuthority("USER", "ADMIN")
-                .antMatchers("/").permitAll()
                 .and()
-                .formLogin()
-                .successHandler(loginSuccessHandler);
-
-        http.logout()
-                // разрешаем делать логаут всем
+                .formLogin().loginProcessingUrl("/login").permitAll()
+                .successHandler(loginSuccessHandler)
+                .and()
+                .logout()
                 .permitAll()
-                // указываем URL при удачном логауте
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/login")
-                //выклчаем кроссдоменную секьюрность (на этапе обучения неважна)
                 .and().csrf().disable();
     }
 

@@ -22,10 +22,17 @@ import java.util.stream.Collectors;
 @Service
 public class UserServiceImpl implements UserDetailsService, UserService {
 
-    private final UserDAO userDAO;
+    private UserDAO userDAO;
+    private BCryptPasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserDAO userDAO) {
+    @Autowired
+    public void setUserDAO(UserDAO userDAO) {
         this.userDAO = userDAO;
+    }
+
+    @Autowired
+    public void setPasswordEncoder(BCryptPasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -37,6 +44,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Override
     @Transactional
     public void add(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userDAO.add(user);
     }
 
@@ -49,7 +57,14 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Override
     @Transactional
     public void edit(User user) {
-        userDAO.edit(user);
+        User oldUser = userDAO.getById(user.getId());
+        if (oldUser.getPassword().equals(user.getPassword())){
+            userDAO.edit(user);
+        }
+        else {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            userDAO.edit(user);
+        }
     }
 
     @Override

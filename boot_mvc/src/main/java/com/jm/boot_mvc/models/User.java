@@ -1,6 +1,7 @@
 package com.jm.boot_mvc.models;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
@@ -11,6 +12,7 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 @Data
+@NoArgsConstructor
 public class User implements UserDetails {
 
     @Id
@@ -32,6 +34,14 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
+
+    public User(String username, String firstName, String lastName, String password, Set<Role> roles) {
+        this.username = username;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.password = password;
+        this.roles = roles;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
