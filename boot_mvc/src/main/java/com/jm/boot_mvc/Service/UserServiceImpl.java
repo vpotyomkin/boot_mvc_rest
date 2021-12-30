@@ -1,6 +1,5 @@
 package com.jm.boot_mvc.Service;
 
-import com.jm.boot_mvc.DAO.RoleDAO;
 import com.jm.boot_mvc.DAO.UserDAO;
 import com.jm.boot_mvc.models.Role;
 import com.jm.boot_mvc.models.User;

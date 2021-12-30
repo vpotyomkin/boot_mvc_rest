@@ -32,7 +32,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         auth.userDetailsService(userService).passwordEncoder(passwordEncoder());
         // конфигурация для прохождения аутентификации
         //тут для аутентификации нам нужно чтобы юзердитейлс информацию передавал
@@ -42,7 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.antMatcher("/*")
                 .authorizeRequests()
-                .antMatchers("/admin/**").hasAnyAuthority("ADMIN", "SUPERADMIN")
+                .antMatchers("/admin/**").hasAnyAuthority("ADMIN")
                 .antMatchers("/user").hasAnyAuthority("USER", "ADMIN")
                 .and()
                 .formLogin().loginProcessingUrl("/login").permitAll()
