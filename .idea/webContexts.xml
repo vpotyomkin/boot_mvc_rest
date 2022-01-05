@@ -4,7 +4,9 @@
     <option name="state">
       <map>
         <entry key="file://$PROJECT_DIR$/boot_mvc/src/main/resources/templates/admin/edit.html" value="file://$PROJECT_DIR$/boot_mvc/src/main/resources/templates/admin" />
+        <entry key="file://$PROJECT_DIR$/boot_mvc/src/main/resources/templates/admin/users.html" value="file://$PROJECT_DIR$/boot_mvc/src/main/resources/templates/admin" />
         <entry key="file://$PROJECT_DIR$/boot_mvc/src/main/resources/templates/index.html" value="file://$PROJECT_DIR$/boot_mvc/src/main/resources/templates" />
+        <entry key="file://$PROJECT_DIR$/boot_mvc/src/main/resources/templates/login.html" value="file://$PROJECT_DIR$/boot_mvc/src/main/resources/templates" />
         <entry key="file://$PROJECT_DIR$/boot_mvc/src/main/resources/templates/user.html" value="file://$PROJECT_DIR$/boot_mvc/src/main/resources/templates" />
         <entry key="file://$PROJECT_DIR$/boot_mvc/src/main/resources/templates/user/currentUser.html" value="file://$PROJECT_DIR$/boot_mvc/src/main/resources/templates/user" />
       </map>

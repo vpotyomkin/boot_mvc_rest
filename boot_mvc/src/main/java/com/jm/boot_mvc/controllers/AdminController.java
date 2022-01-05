@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,14 +30,24 @@ public class AdminController {
         this.roleService = roleService;
     }
 
-    @GetMapping(path = "")
-    public String getUsers(Model model) {
+    @GetMapping(path = "/users")
+    public String getUsers(Model model, Principal principal) {
         model.addAttribute("users", userService.getAll());
         model.addAttribute("userInfo",new User());
         model.addAttribute("allRoles", roleService.getAll());
+        model.addAttribute("loggedUser", userService.getByUsername(principal.getName()));
         return "/admin/users";}
 
-    @PostMapping(path = "/users")
+
+    @GetMapping("/user")
+    public String showUser (Model model, Principal principal){
+        model.addAttribute("users", userService.getAll());
+        model.addAttribute("loggedUser", userService.getByUsername(principal.getName()));
+        return "/admin/currentUser";
+    }
+
+
+    @PostMapping(path = "/users/save")
     public String add(@ModelAttribute("userInfo") User user, @RequestParam("rolesSelected") Long[] roles){
         Set<Role> roleSet = new HashSet<>();
         for (Long s : roles) {
@@ -43,19 +55,13 @@ public class AdminController {
         }
         user.setRoles(roleSet);
         userService.add(user);
-        return "redirect:/admin";
+        return "redirect:/admin/users";
     }
 
     @DeleteMapping(path = "/users/delete/{id}")
     public String deleteUser(@PathVariable("id") long id) {
         userService.delete(id);
-        return "redirect:/admin";}
-
-    @GetMapping(path = "/users/edit/{id}")
-    public String getUser(Model model, @PathVariable("id") long id) {
-        model.addAttribute("allRoles", roleService.getAll());
-        model.addAttribute("userToEdit", userService.getById(id));
-        return "admin/edit";}
+        return "redirect:/admin/users";}
 
     @PatchMapping(path = "/users/edit/{id}")
     public String editUser(@ModelAttribute("userToEdit") User userToEdit, @PathVariable("id") long id, @RequestParam("rolesSelected") Long[] roles, Model model) {
@@ -66,5 +72,5 @@ public class AdminController {
         }
         userToEdit.setRoles(roleSet);
         userService.edit(userToEdit);
-        return "redirect:/admin";}
+        return "redirect:/admin/users";}
 }
