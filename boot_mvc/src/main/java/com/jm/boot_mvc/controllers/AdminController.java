@@ -1,17 +1,7 @@
 package com.jm.boot_mvc.controllers;
 
-import com.jm.boot_mvc.Service.RoleService;
-import com.jm.boot_mvc.Service.UserService;
-import com.jm.boot_mvc.models.Role;
-import com.jm.boot_mvc.models.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.security.Principal;
-import java.util.HashSet;
-import java.util.Set;
 
 @Controller
 @RequestMapping("/admin")

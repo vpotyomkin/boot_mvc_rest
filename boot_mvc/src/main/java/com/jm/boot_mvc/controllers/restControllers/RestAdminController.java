@@ -1,20 +1,15 @@
 package com.jm.boot_mvc.controllers.restControllers;
 
-import com.jm.boot_mvc.Service.RoleService;
 import com.jm.boot_mvc.Service.UserService;
-import com.jm.boot_mvc.models.Role;
 import com.jm.boot_mvc.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Controller
 @RequestMapping("/api/admin")
