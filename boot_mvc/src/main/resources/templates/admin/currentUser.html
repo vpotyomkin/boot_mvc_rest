@@ -11,9 +11,7 @@
 <body>
 
 <nav class="navbar navbar-dark bg-dark">
-    <div class="navbar-brand inline">
-        <b th:text="${loggedUser.getFirstName()}">name</b> with roles:
-        <b class="font-weight-normal" th:text="${loggedUser.getRoles()}">name</b>
+    <div class="navbar-brand inline" id="userInfo">
     </div>
     <div>
         <a href="/logout" class="text-muted">Logout</a>
@@ -55,14 +53,7 @@
                                         <th>Role</th>
                                     </tr>
                                     </thead>
-                                    <tbody>
-                                    <tr class="font-weight-normal">
-                                        <td th:utext="${loggedUser.getId()}"></td>
-                                        <td th:utext="${loggedUser.getUsername()}"></td>
-                                        <td th:utext="${loggedUser.getFirstName()}"></td>
-                                        <td th:utext="${loggedUser.getLastName()}"></td>
-                                        <td th:utext="${loggedUser.getRoles()}"></td>
-                                    </tr>
+                                    <tbody id="tableForUser">
                                     </tbody>
                                 </table>
                             </th>
@@ -74,6 +65,30 @@
     </div>
 </div>
 
+<script>
+    function getTableForUser() {
+        fetch("http://localhost:8080/api/admin/user/")
+            .then(res => res.json())
+            .then(user => {
+                let userRoles = ''
+                for (let i = 0; i < user.roles.length; i++) {
+                    userRoles += `${user.roles[i].name} `
+                }
+                let tableFilling = `
+                        <tr>
+                            <td>${user.id}</td>
+                            <td>${user.username}</td>
+                            <td>${user.firstName}</td>
+                            <td>${user.lastName}</td>
+                            <td>${userRoles}</td>
+                        </tr>
+                `;
+                document.getElementById("userInfo").innerHTML = `${user.username}` + " with roles: " + userRoles;
+                document.getElementById("tableForUser").innerHTML = tableFilling;
+            })
+    }
+    getTableForUser()
+</script>
 
 
 <!-- Optional JavaScript -->

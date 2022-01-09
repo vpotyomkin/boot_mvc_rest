@@ -17,60 +17,27 @@ import java.util.Set;
 @RequestMapping("/admin")
 public class AdminController {
 
-    private UserService userService;
-    private RoleService roleService;
-
-    @Autowired
-    public void setUserService(UserService userService) {
-        this.userService = userService;
-    }
-
-    @Autowired
-    public void setRoleService(RoleService roleService) {
-        this.roleService = roleService;
-    }
-
     @GetMapping(path = "/users")
-    public String getUsers(Model model, Principal principal) {
-        model.addAttribute("users", userService.getAll());
-        model.addAttribute("userInfo",new User());
-        model.addAttribute("allRoles", roleService.getAll());
-        model.addAttribute("loggedUser", userService.getByUsername(principal.getName()));
+    public String getUsers() {
         return "/admin/users";}
 
 
     @GetMapping("/user")
-    public String showUser (Model model, Principal principal){
-        model.addAttribute("users", userService.getAll());
-        model.addAttribute("loggedUser", userService.getByUsername(principal.getName()));
+    public String showUser (){
         return "/admin/currentUser";
     }
 
 
-    @PostMapping(path = "/users/save")
-    public String add(@ModelAttribute("userInfo") User user, @RequestParam("rolesSelected") Long[] roles){
-        Set<Role> roleSet = new HashSet<>();
-        for (Long s : roles) {
-            roleSet.add(roleService.getById(s));
-        }
-        user.setRoles(roleSet);
-        userService.add(user);
+    @PostMapping(path = "/users")
+    public String add(){
         return "redirect:/admin/users";
     }
 
-    @DeleteMapping(path = "/users/delete/{id}")
-    public String deleteUser(@PathVariable("id") long id) {
-        userService.delete(id);
+    @DeleteMapping(path = "/users")
+    public String deleteUser() {
         return "redirect:/admin/users";}
 
-    @PatchMapping(path = "/users/edit/{id}")
-    public String editUser(@ModelAttribute("userToEdit") User userToEdit, @PathVariable("id") long id, @RequestParam("rolesSelected") Long[] roles, Model model) {
-        model.addAttribute("userToEdit", userService.getById(id));
-        Set<Role> roleSet = new HashSet<>();
-        for (Long s : roles) {
-            roleSet.add(roleService.getById(s));
-        }
-        userToEdit.setRoles(roleSet);
-        userService.edit(userToEdit);
+    @PutMapping(path = "/users")
+    public String editUser() {
         return "redirect:/admin/users";}
 }

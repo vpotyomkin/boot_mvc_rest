@@ -14,16 +14,8 @@ import java.security.Principal;
 @RequestMapping("/user")
 public class UserController {
 
-    private UserService userService;
-    @Autowired
-    public void setUserService(UserService userService) {
-        this.userService = userService;
-    }
-
-    @GetMapping("/{id}")
-    public String showUser (@PathVariable("id") Long id, Model model){
-        model.addAttribute("loggedUser", userService.getById(id));
+    @GetMapping("")
+    public String showUser (){
         return "/user/currentUser";
     }
-
 }
